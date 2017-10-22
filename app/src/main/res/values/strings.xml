@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">InfiSpace</string>
+    <string name="title_activity_home">InfiSpace</string>
+    <string name="facebook_app_id">354709284955875</string>
+    <string name="fb_login_protocol_scheme">fb354709284955875</string>
+
+
+</resources>
