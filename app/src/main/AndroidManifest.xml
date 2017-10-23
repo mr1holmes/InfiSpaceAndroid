@@ -46,6 +46,13 @@
             </intent-filter>
         </activity>
 
+        <!--Content Provider-->
+        <provider
+            android:name=".data.InfiDataProvider"
+            android:authorities="com.example.infispace"
+            android:exported="false"
+            android:syncable="false" />
+
 
     </application>
 

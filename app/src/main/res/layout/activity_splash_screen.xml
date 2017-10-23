@@ -14,23 +14,29 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_icon_to_text"
+        android:layout_marginTop="@dimen/margin_xsmall"
         android:text="@string/app_name"
         android:textColor="@color/app_body_text_1"
         android:textSize="@dimen/launch_text_size"
         android:textStyle="bold" />
 
-    <FrameLayout
+    <TextView
+        android:id="@+id/splash_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_icon_to_text">
+        android:layout_margin="@dimen/margin_icon_to_text"
+        android:textSize="15sp" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/margin_icon_to_text"
+            android:layout_marginTop="@dimen/margin_xsmall"
             android:visibility="gone" />
 
         <ProgressBar
@@ -39,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp"
+            android:layout_margin="@dimen/margin_xsmall"
             android:visibility="visible" />
     </FrameLayout>
 

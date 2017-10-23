@@ -3,6 +3,12 @@
     <string name="title_activity_home">InfiSpace</string>
     <string name="facebook_app_id">354709284955875</string>
     <string name="fb_login_protocol_scheme">fb354709284955875</string>
+    <string name="server_url">http://10.42.0.160:5000</string>
+    <string name="my_id">0</string>
+    <string name="dummy_profile_name">Chirag Chauhan</string>
+    <string name="logout_label">Log Out</string>
+    <string name="fetch_fb_string">Fetching your data from facebook…</string>
+    <string name="send_data_string">Sending your data to server…</string>
 
 
 </resources>

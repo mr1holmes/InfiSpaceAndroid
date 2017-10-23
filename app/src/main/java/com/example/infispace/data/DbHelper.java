@@ -10,9 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 
     // change database version when schema is changed
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
-    static final String DATABASE_NAME = "planup.db";
+    static final String DATABASE_NAME = "infispace.db";
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

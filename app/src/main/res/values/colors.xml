@@ -13,4 +13,8 @@
     <color name="app_body_text_1">#de000000</color>
     <color name="app_body_text_2">#8a000000</color>
 
+    <!--Tab color-->
+    <color name="tab_background_color">#de000000</color>
+    <color name="unselected_tab_on_primary">#757575</color>
+
 </resources>

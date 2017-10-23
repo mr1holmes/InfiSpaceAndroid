@@ -1,7 +1,13 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="launch_icon_size">100dp</dimen>
-    <dimen name="margin_icon_to_text">24dp</dimen>
-
+    <dimen name="margin_icon_to_text">48dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="launch_text_size">24sp</dimen>
+    <dimen name="profile_icon_size">100dp</dimen>
+    <dimen name="margin_small">24dp</dimen>
+    <dimen name="margin_xsmall">12dp</dimen>
+    <dimen name="margin_large">72dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
 </resources>
