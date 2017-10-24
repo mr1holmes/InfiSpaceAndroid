@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    tools:context="com.example.infispace.AddStory">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_icon_to_text"
+        android:padding="@dimen/padding_small"
+        android:text="@string/add_story_label"
+        android:textColor="@color/app_body_text_1"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold" />
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/story_title_layout"
+        android:layout_width="@dimen/edittext_size"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:gravity="center"
+        android:padding="@dimen/padding_small">
+
+        <EditText
+            android:id="@+id/story_title_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Story Title" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/story_url_layout"
+        android:layout_width="@dimen/edittext_size"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:gravity="center"
+        android:padding="@dimen/padding_small">
+
+        <EditText
+            android:id="@+id/story_url_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Story Url"
+            android:inputType="textUri" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/post_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/margin_large"
+        android:background="@color/com_facebook_blue"
+        android:padding="@dimen/padding_small"
+        android:text="@string/post_label"
+        android:textAllCaps="false"
+        android:textColor="@color/text_on_primary" />
+
+
+</LinearLayout>

@@ -16,8 +16,8 @@ public class InfiDataProvider extends ContentProvider {
     private static final UriMatcher mUriMatcher = buildUriMatcher();
 
     // codes for type of service
-    static final int USER = 200;
-    static final int USER_WITH_ID = 201;
+    public static final int USER = 200;
+    public static final int USER_WITH_ID = 201;
 
 
     private static final SQLiteQueryBuilder sUserQueryBuilder;

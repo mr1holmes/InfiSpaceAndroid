@@ -46,14 +46,14 @@
             </intent-filter>
         </activity>
 
-        <!--Content Provider-->
+        <!-- Content Provider -->
         <provider
             android:name=".data.InfiDataProvider"
             android:authorities="com.example.infispace"
             android:exported="false"
             android:syncable="false" />
 
-
+        <activity android:name=".AddStory"></activity>
     </application>
 
 </manifest>

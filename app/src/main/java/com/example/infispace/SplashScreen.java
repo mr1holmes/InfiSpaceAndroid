@@ -2,15 +2,19 @@ package com.example.infispace;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DatabaseUtils;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +51,7 @@ public class SplashScreen extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private ProgressBar mProgressBar;
     private TextView mSplashInfo;
+    private Button mChangeServerBtn;
     private final String TAG = LogUtil.makeLogTag(this.getClass());
 
     @Override
@@ -57,6 +62,35 @@ public class SplashScreen extends AppCompatActivity {
 
         mProgressBar = (ProgressBar) findViewById(R.id.login_progress);
         mSplashInfo = (TextView) findViewById(R.id.splash_info);
+        mChangeServerBtn = (Button) findViewById(R.id.change_server_btn);
+        mChangeServerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(SplashScreen.this);
+
+                alert.setTitle("Server URL");
+                alert.setMessage("Change Server URL");
+
+                final EditText input = new EditText(SplashScreen.this);
+                alert.setView(input);
+                input.setText(AccountsUtil.getServerUrl(SplashScreen.this));
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String value = input.getText().toString();
+                        AccountsUtil.setServerUrl(value, SplashScreen.this);
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Canceled.
+                    }
+                });
+
+                alert.show();
+            }
+        });
 
         mLoginButton = (LoginButton) findViewById(R.id.login_button);
         mLoginButton.setReadPermissions(AccountsUtil.FACEBOOK_PERMISSIONS);
@@ -64,6 +98,7 @@ public class SplashScreen extends AppCompatActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
+                        mChangeServerBtn.setVisibility(View.GONE);
                         LogUtil.LOGD(TAG, "permissions = " + AccessToken.getCurrentAccessToken().getPermissions());
 
 
@@ -112,6 +147,7 @@ public class SplashScreen extends AppCompatActivity {
                 });
 
         if (AccountsUtil.isLoggedIn()) {
+            mChangeServerBtn.setVisibility(View.GONE);
             // show startup screen for few second and then move to next screen
             Handler mHandler = new Handler();
             mHandler.postDelayed(new Runnable() {
@@ -162,11 +198,7 @@ public class SplashScreen extends AppCompatActivity {
                 se.printStackTrace();
             }
 
-            // Store id to identify current user
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.my_id), user_id);
-            editor.apply();
+            AccountsUtil.setUserId(user_id, this);
 
             mSplashInfo.setText(getString(R.string.send_data_string));
             JSONObject dataObj = new JSONObject();
@@ -179,7 +211,7 @@ public class SplashScreen extends AppCompatActivity {
             requestObject.put("data", dataObj);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                    getString(R.string.server_url) + "/users", requestObject, new Response.Listener<JSONObject>() {
+                    AccountsUtil.getServerUrl(SplashScreen.this) + "/users", requestObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     LogUtil.LOGV(TAG, "User added on server " + response);
@@ -198,6 +230,24 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
 
+    private void sendFriendsToServer(JSONObject payload) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                AccountsUtil.getServerUrl(SplashScreen.this) + "/friendship", payload, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                LogUtil.LOGV(TAG, "Friends added on server " + response);
+                startNext();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                LogUtil.LOGD(TAG, "Something went wrong while adding friends on server");
+            }
+        });
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
 
     private void fetchUserFriends(AccessToken accessToken) {
         LogUtil.LOGD(TAG, "Fetching friends started");
@@ -209,13 +259,11 @@ public class SplashScreen extends AppCompatActivity {
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         JSONObject responseObject = response.getJSONObject();
                         try {
+                            JSONObject payload = new JSONObject();
                             JSONArray data = responseObject.getJSONObject("friends").getJSONArray("data");
-                            for (int index = 0; index < data.length(); index++) {
-                                JSONObject friendObject = data.getJSONObject(index);
-                                LogUtil.LOGD(TAG, friendObject.getString("first_name"));
-                                // TODO: send this user's friends to server
-                                startNext();
-                            }
+                            payload.put("data", data);
+                            payload.put("user_id", AccountsUtil.getUserId(SplashScreen.this));
+                            sendFriendsToServer(payload);
                         } catch (JSONException je) {
                             je.printStackTrace();
                         }
@@ -224,43 +272,9 @@ public class SplashScreen extends AppCompatActivity {
                 });
 
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "friends{id,first_name,last_name,picture{url}}");
+        parameters.putString("fields", "friends{id,first_name,last_name,picture.type(large)}");
         request.setParameters(parameters);
         request.executeAsync();
 
-//        LogUtil.LOGV(TAG, "Fetching user friends started");
-//
-//        GraphRequest.Callback fetchFriendsCallback = new GraphRequest.Callback() {
-//            @Override
-//            public void onCompleted(GraphResponse response) {
-//                JSONObject responseObject = response.getJSONObject();
-//                try {
-//                    JSONArray data = responseObject.getJSONObject("friends").getJSONArray("data");
-//                    for (int index = 0; index < data.length(); index++) {
-//                        JSONObject friendObject = data.getJSONObject(index);
-//                        LogUtil.LOGD(TAG, friendObject.getString("first_name"));
-//                        // TODO: send this user's friends to server
-//                    }
-//                } catch (JSONException je) {
-//                    je.printStackTrace();
-//                }
-//
-//                //get next batch of results if exists
-//                GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
-//                if (nextRequest != null) {
-//                    nextRequest.setCallback(this);
-//                    nextRequest.executeAsync();
-//                } else {
-//                    LogUtil.LOGV(TAG, "End of Fetch user paging");
-//                    startNext();
-//                }
-//
-//            }
-//        };
-//        Bundle parameters = new Bundle();
-//        parameters.putString("fields", "friends{id,first_name,last_name,picture{url}}");
-//
-//        new GraphRequest(AccessToken.getCurrentAccessToken(),
-//                "me", parameters, HttpMethod.GET, fetchFriendsCallback).executeAsync();
     }
 }

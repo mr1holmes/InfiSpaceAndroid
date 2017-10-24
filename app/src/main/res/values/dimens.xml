@@ -5,9 +5,17 @@
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="launch_text_size">24sp</dimen>
     <dimen name="profile_icon_size">100dp</dimen>
+    <dimen name="share_icon_size">48dp</dimen>
     <dimen name="margin_small">24dp</dimen>
     <dimen name="margin_xsmall">12dp</dimen>
     <dimen name="margin_large">72dp</dimen>
+    <dimen name="margin_xlarge">100dp</dimen>
     <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_xsmall">4dp</dimen>
+    <dimen name="padding_large">18dp</dimen>
+    <dimen name="text_size_normal">15sp</dimen>
     <dimen name="text_size_large">18sp</dimen>
+    <dimen name="edittext_size">200dp</dimen>
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_radius">5dp</dimen>
 </resources>

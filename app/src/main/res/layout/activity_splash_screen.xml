@@ -49,4 +49,19 @@
             android:visibility="visible" />
     </FrameLayout>
 
+    <Button
+        android:id="@+id/change_server_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_xlarge"
+        android:background="@color/com_facebook_blue"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="0dp"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        android:paddingTop="0dp"
+        android:text="@string/change_server_label"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+
 </LinearLayout>

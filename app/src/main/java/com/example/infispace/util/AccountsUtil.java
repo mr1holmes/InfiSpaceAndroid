@@ -26,6 +26,34 @@ public class AccountsUtil {
         return user_id;
     }
 
+    public static void setUserId(String userId, Context mContext) {
+        // Store id to identify current user
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(mContext.getString(R.string.my_id), userId);
+        editor.apply();
+    }
+
+    public static void setServerUrl(String url, Context mContext) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(mContext.getString(R.string.server_url_label), url);
+        editor.apply();
+    }
+
+    public static String getServerUrl(Context mContext) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String server_url = sharedPref.getString(mContext.getString(R.string.server_url_label), mContext.getString(R.string.server_url_default));
+        return server_url;
+    }
+
+
+    public static String getTimeStamp() {
+        Long tsLong = System.currentTimeMillis() / 1000;
+        String ts = tsLong.toString();
+        return ts;
+    }
+
     public static String unescapeString(String string) {
         if (string == null)
             return null;

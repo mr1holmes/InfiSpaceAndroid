@@ -28,6 +28,7 @@ import com.example.infispace.R;
 import com.example.infispace.SplashScreen;
 import com.example.infispace.data.InfiContract;
 import com.example.infispace.util.AccountsUtil;
+import com.example.infispace.util.CircleTransform;
 import com.example.infispace.util.LogUtil;
 import com.example.infispace.util.VolleySingleton;
 import com.facebook.login.LoginManager;
@@ -64,8 +65,8 @@ public class ProfileFragment extends Fragment {
 
         String user_id = AccountsUtil.getUserId(getActivity());
 
-        Cursor mCursor = getActivity().getContentResolver().query(InfiContract.TABLE_USER.CONTENT_URI, null,
-                InfiContract.TABLE_USER.COLUMN_USER_ID + "=?", new String[]{user_id}, null);
+        Uri userUri = InfiContract.TABLE_USER.buildUserUri(Long.parseLong(user_id));
+        Cursor mCursor = getActivity().getContentResolver().query(userUri, null, null, null, null);
         try {
             while (mCursor.moveToNext()) {
                 LogUtil.LOGD(TAG, "firstName = " + mCursor.getString(mCursor.getColumnIndex(InfiContract.TABLE_USER.COLUMN_FIRST_NAME)));
@@ -78,6 +79,9 @@ public class ProfileFragment extends Fragment {
                 String firstName = mCursor.getString(mCursor.getColumnIndex(InfiContract.TABLE_USER.COLUMN_FIRST_NAME));
                 String lastName = mCursor.getString(mCursor.getColumnIndex(InfiContract.TABLE_USER.COLUMN_LAST_NAME));
                 mProfileName.setText(firstName + " " + lastName);
+
+                // we only need the first result
+                break;
             }
         } finally {
             mCursor.close();
@@ -86,38 +90,4 @@ public class ProfileFragment extends Fragment {
         return rootView;
     }
 
-    public class CircleTransform implements Transformation {
-        @Override
-        public Bitmap transform(Bitmap source) {
-            int size = Math.min(source.getWidth(), source.getHeight());
-
-            int x = (source.getWidth() - size) / 2;
-            int y = (source.getHeight() - size) / 2;
-
-            Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
-            if (squaredBitmap != source) {
-                source.recycle();
-            }
-
-            Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
-
-            Canvas canvas = new Canvas(bitmap);
-            Paint paint = new Paint();
-            BitmapShader shader = new BitmapShader(squaredBitmap,
-                    BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
-            paint.setShader(shader);
-            paint.setAntiAlias(true);
-
-            float r = size / 2f;
-            canvas.drawCircle(r, r, r, paint);
-
-            squaredBitmap.recycle();
-            return bitmap;
-        }
-
-        @Override
-        public String key() {
-            return "circle";
-        }
-    }
 }
